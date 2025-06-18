@@ -1,10 +1,44 @@
-const http = require('http');
-const app = require('./app'); // Import the Express app
-const dotenv = require('dotenv'); // Import dotenv to load environment variables
-const port = process.env.PORT || 3000; // Set the port from environment variables or default to 3000
+const express = require("express");
+const dotenv = require("dotenv");
+const connectDB = require("./config/db");
+const cors = require("cors");
 
+// Load env variables
+dotenv.config();
 
-const server = http.createServer(app); // Create an HTTP server using the Express app
-server.listen(port, ()=>{
-    console.log(`Server is running on port ${port}`); 
-}); // Start the server on port 3000
+// Connect to MongoDB
+connectDB();
+
+// Init express
+const app = express();
+
+// Middlewares
+app.use(express.json());
+app.use(cors());
+
+// Import Routes
+const employeeRoutes = require("./routes/employeeRoutes");
+const itemRoutes = require("./routes/itemRoutes");
+const boxRoutes = require("./routes/boxRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+const materialRoutes = require("./routes/materialRoutes");
+const labelRoutes = require("./routes/labelRoutes");
+const sustainabilityFactorRoutes = require("./routes/sustainabilityFactorRoutes");
+
+// Use Routes
+app.use("/api/employees", employeeRoutes);
+app.use("/api/items", itemRoutes);
+app.use("/api/boxes", boxRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/materials", materialRoutes);
+app.use("/api/labels", labelRoutes);
+app.use("/api/sustainability", sustainabilityFactorRoutes);
+
+// Root route
+app.get("/", (req, res) => {
+    res.send("🌱 API running");
+});
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
