@@ -17,14 +17,21 @@ const Navbar = () => {
             </Link>
             </span>
       </div>
-      <div>
-        <Link
-          to="/summary"
-          className="text-white hover:text-sparkyellow transition duration-200 text-lg font-medium"
-        >
-          Summary
-        </Link>
-      </div>
+      <div className="flex space-x-6">
+  <Link
+    to="/summary"
+    className="text-white hover:text-sparkyellow transition duration-200 text-lg font-medium"
+  >
+    Summary
+  </Link>
+  <Link
+    to="/login"
+    className="text-white hover:text-sparkyellow transition duration-200 text-lg font-medium"
+  >
+    Logout
+  </Link>
+</div>
+
     </nav>
   );
 };

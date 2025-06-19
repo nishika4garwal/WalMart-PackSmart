@@ -43,7 +43,7 @@ const Labels = () => {
         <div className="absolute w-96 h-96 bg-trueblue opacity-30 rounded-full blur-3xl top-10 right-[-100px]"></div>
 
         {/* Label Info Card */}
-        <div className="bg-sparkyellow rounded-2xl shadow-xl max-w-lg w-full p-8 text-center relative z-10">
+        <div className="bg-[#DDEEDF] rounded-2xl shadow-xl max-w-lg w-full p-8 text-center relative z-10">
           <h2 className="text-2xl font-bold text-trueblue mb-4">Label To Put</h2>
           <p className="text-lg text-gray-700 mb-6">{labelInfo}</p>
 
