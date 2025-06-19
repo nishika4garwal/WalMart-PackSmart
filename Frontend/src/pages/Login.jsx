@@ -3,7 +3,7 @@
 import React from 'react';
 import logo from '../assets/logo.png';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import instance from '../../axios';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -12,25 +12,28 @@ const Login = () => {
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
-    e.preventDefault(); // Prevent form reload
-    const userData = {
-      email: email,
-      password: password
-    };
+    e.preventDefault();
 
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, userData)
-    // console.log(userData);
-    
-    if (response.status === 200) {
-      const data = response.data;
-      // setUser(data.user);
-      localStorage.setItem('token', data.token); 
-      navigate('/');     
+    try {
+      console.log("Sending login data:", { email, password });
+      
+      const response = await instance.post(
+        `/employees/login`, 
+        { email, password }
+      );
+
+      if (response.status === 200) {
+        const data = response.data;
+        localStorage.setItem('token', data.token);
+        navigate('/home'); 
+      }
+    } catch (err) {
+      alert('Invalid credentials or server error');
+      console.error(err);
     }
 
-
-    setEmail(''); // Clear email input
-    setPassword(''); // Clear password input
+    setEmail('');
+    setPassword('');
   };
 
   return (
