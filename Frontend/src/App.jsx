@@ -9,6 +9,7 @@ import BestBox from './pages/BestBox';
 import Labels from './pages/Labels';
 import AllMaterials from './pages/AllMaterials';
 import Last from './pages/Last';
+import Logout from './pages/Logout';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Route path="/labels" element={<Labels />} />
       <Route path="/materials" element={<AllMaterials />} />
       <Route path="/last" element={<Last />} />
+      <Route path="/logout" element={<Logout />} />
     </Routes>
   );
 }

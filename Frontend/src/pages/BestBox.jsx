@@ -37,7 +37,7 @@ const BestBox = () => {
         <div className="absolute w-96 h-96 bg-trueblue opacity-30 rounded-full blur-3xl top-10 left-[-100px]"></div>
         <div className="absolute w-96 h-96 bg-trueblue opacity-30 rounded-full blur-3xl top-10 right-[-100px]"></div>
         {/* Suggestion Box */}
-        <div className="bg-sparkyellow rounded-2xl shadow-xl max-w-lg w-full p-8 text-center">
+        <div className="bg-[#DDEEDF] rounded-2xl shadow-xl max-w-lg w-full p-8 text-center">
           <h2 className="text-2xl font-bold text-trueblue mb-4">Best Box Suggestion</h2>
           <p className="text-lg text-gray-700 mb-6">{suggestion}</p>
 
