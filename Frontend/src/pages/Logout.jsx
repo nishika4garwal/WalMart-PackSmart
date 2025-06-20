@@ -13,7 +13,7 @@ export const Logout = () => {
     }).then(response => {
         if (response.status === 200) {
             //localStorage.removeItem('token')
-            navigate('/login')
+            navigate('/')
         }
     })
   return (

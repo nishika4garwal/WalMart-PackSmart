@@ -12,7 +12,7 @@ const Navbar = () => {
         className="max-h-full w-auto object-contain"
         />
         <span className="text-xl hover:text-sparkyellow font-semibold">
-            <Link to = "/">
+            <Link to = "/home">
             Admin Dashboard
             </Link>
             </span>
@@ -25,7 +25,7 @@ const Navbar = () => {
     Summary
   </Link>
   <Link
-    to="/login"
+    to="/"
     className="text-white hover:text-sparkyellow transition duration-200 text-lg font-medium"
   >
     Logout
