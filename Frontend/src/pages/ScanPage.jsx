@@ -14,12 +14,14 @@ const ScanPage = () => {
   const navigate = useNavigate();
 
   const fetchItemDetails = async (barcodeId) => {
-    return {
-      id: barcodeId,
-      name: `Item ${barcodeId}`,
-      weight: Math.floor(Math.random() * 10 + 1),
-      volume: Math.floor(Math.random() * 5 + 1),
-    };
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/items/${barcodeId}`);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching item from DB:', error);
+      return null;
+    }
   };
 
   const startScanner = async () => {
@@ -158,7 +160,7 @@ const ScanPage = () => {
             <tbody>
               {items.map((item, i) => (
                 <tr key={i}>
-                  <td className="border px-4 py-2">{item.id}</td>
+                  <td className="border px-4 py-2">{item.itemId}</td>
                   <td className="border px-4 py-2">{item.name}</td>
                   <td className="border px-4 py-2">{item.weight} kg</td>
                   <td className="border px-4 py-2">{item.volume} L</td>

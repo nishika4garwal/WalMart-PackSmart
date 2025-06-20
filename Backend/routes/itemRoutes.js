@@ -23,4 +23,17 @@ router.get("/", async (req, res) => {
     }
 });
 
+
+// Route: GET /api/items/:itemId
+router.get('/:itemId', async (req, res) => {
+    try {
+        const item = await Item.findOne({ itemId: req.params.itemId });
+        if (!item) return res.status(404).json({ message: 'Item not found' });
+        res.json(item);
+    } catch (err) {
+        console.error('Error fetching item:', err);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 module.exports = router;
