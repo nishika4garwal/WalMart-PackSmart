@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const boxSchema = new mongoose.Schema({
     boxId: {
-        type: String,
+        type: Number,
         required: true,
         unique: true,
     },
@@ -27,11 +27,11 @@ const boxSchema = new mongoose.Schema({
         required: true,
     },
     madeOfRecycledMaterial: {
-        type: Boolean,
+        type: String,
         default: false,
     },
     reusable: {
-        type: Boolean,
+        type: String,
         default: false,
     },
     maxWeightSupport: {
