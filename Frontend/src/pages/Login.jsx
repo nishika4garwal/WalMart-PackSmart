@@ -1,14 +1,14 @@
-/* need db logic in backend app.js to actually login */
-
 import React from 'react';
 import logo from '../assets/logo.png';
 import { Link } from 'react-router-dom';
 import instance from '../../axios';
 import { useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react'; // Optional: Replace with any icon or plain text
 
 const Login = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [showPassword, setShowPassword] = React.useState(false);
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
@@ -16,16 +16,13 @@ const Login = () => {
 
     try {
       console.log("Sending login data:", { email, password });
-      
-      const response = await instance.post(
-        `/employees/login`, 
-        { email, password }
-      );
+
+      const response = await instance.post(`/employees/login`, { email, password });
 
       if (response.status === 200) {
         const data = response.data;
         localStorage.setItem('token', data.token);
-        navigate('/home'); 
+        navigate('/home');
       }
     } catch (err) {
       alert('Invalid credentials or server error');
@@ -38,35 +35,25 @@ const Login = () => {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-[#FDFBFB] to-[#EBEDFF] flex items-center justify-center px-4 overflow-hidden">
-
-      {/* Decorative blob */}
       <div className="absolute w-96 h-96 bg-trueblue opacity-30 rounded-full blur-3xl top-10 left-[-100px]"></div>
-        <div className="absolute w-96 h-96 bg-trueblue opacity-30 rounded-full blur-3xl top-10 right-[-100px]"></div>
-      {/* Login Card */}
-      <div className="relative z-10 bg-sparkyellow rounded-2xl shadow-2xl w-full max-w-md p-8 flex flex-col items-center">
+      <div className="absolute w-96 h-96 bg-trueblue opacity-30 rounded-full blur-3xl top-10 right-[-100px]"></div>
 
-        {/* Logo */}
+      <div className="relative z-10 bg-sparkyellow rounded-2xl shadow-2xl w-full max-w-md p-8 flex flex-col items-center">
         <img
           src={logo}
           alt="Walmart Logo"
           className="w-36 h-36 object-contain mb-6"
         />
 
-        {/* Title */}
         <h2 className="text-2xl font-bold text-trueblue mb-6">
           Login to Admin Dashboard
         </h2>
 
-        {/* Login Form */}
-        <form 
-          onSubmit={(e) => {
-            submitHandler(e);
-          }}
-          className="w-full space-y-4">
+        <form onSubmit={submitHandler} className="w-full space-y-4">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email
-              </label>
+            </label>
             <input
               type="email"
               id="email"
@@ -78,18 +65,26 @@ const Login = () => {
             />
           </div>
 
-          <div>
-            <label htmlFor = "password" className="block text-sm font-medium text-gray-700">
+          <div className="relative">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Password
-              </label>
+            </label>
             <input
-              type="password"
-              id = "password"
+              type={showPassword ? 'text' : 'password'}
+              id="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-trueblue"
+              className="w-full mt-1 px-4 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-trueblue"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 bottom-2.5 text-gray-500 hover:text-black focus:outline-none"
+              tabIndex={-1}
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
           </div>
 
           <button
