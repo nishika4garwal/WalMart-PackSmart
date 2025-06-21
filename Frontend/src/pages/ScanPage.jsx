@@ -8,6 +8,7 @@ import axios from 'axios';
 const ScanPage = () => {
   const [items, setItems] = useState([]);
   const [scanning, setScanning] = useState(false);
+  const [manualId, setManualId] = useState('');
   const videoRef = useRef(null);
   const codeReaderRef = useRef(null);
   const controlsRef = useRef(null);
@@ -33,9 +34,27 @@ const ScanPage = () => {
     }
   };
 
+  const handleManualAdd = async () => {
+    if (!manualId.trim()) {
+      alert('Please enter a valid Item ID.');
+      return;
+    }
+
+    const item = await fetchItemDetails(manualId.trim());
+    if (item) {
+      const qty = prompt(`Enter quantity for ${item.name}:`, '1');
+      const quantity = parseInt(qty);
+      if (!isNaN(quantity) && quantity > 0) {
+        setItems((prev) => [...prev, { ...item, quantity }]);
+        setManualId('');
+      } else {
+        alert('Invalid quantity. Item not added.');
+      }
+    }
+  };
+
   const startScanner = async () => {
     if (codeReaderRef.current) return;
-
     const hints = new Map();
     hints.set(DecodeHintType.TRY_HARDER, true);
     hints.set(DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.CODE_128]);
@@ -62,7 +81,6 @@ const ScanPage = () => {
           if (item) {
             const qty = prompt(`Enter quantity for ${item.name}:`, '1');
             const quantity = parseInt(qty);
-
             if (!isNaN(quantity) && quantity > 0) {
               setItems((prev) => [...prev, { ...item, quantity }]);
             } else {
@@ -108,17 +126,11 @@ const ScanPage = () => {
   };
 
   const handleToggleScan = () => {
-    if (scanning) {
-      stopScanner();
-    } else {
-      startScanner();
-    }
+    scanning ? stopScanner() : startScanner();
   };
 
   useEffect(() => {
-    return () => {
-      stopScanner();
-    };
+    return () => stopScanner();
   }, []);
 
   const handleCalculate = async () => {
@@ -133,61 +145,86 @@ const ScanPage = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBFB] to-[#EBEDFF] px-6 py-10 flex flex-col lg:flex-row justify-center gap-10 items-start">
-        {/* Scanner */}
-        <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-lg">
-          <h2 className="text-xl font-bold text-trueblue mb-4 text-center">Scan Barcode</h2>
+      <div className="min-h-screen bg-gradient-to-br from-[#fefefe] to-[#f1f5ff] px-6 py-10 flex flex-wrap justify-center gap-8 items-start">
+        {/* Scanner Box */}
+        <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md transition hover:shadow-2xl">
+          <h2 className="text-xl font-semibold text-trueblue mb-4 text-center">📷 Scan Barcode</h2>
           <video
             ref={videoRef}
-            className="w-full rounded-md"
+            className="w-full h-60 object-cover rounded-md bg-black"
             muted
             playsInline
-            style={{ backgroundColor: 'black' }}
-          ></video>
+          />
           <button
             onClick={handleToggleScan}
-            className={`mt-6 w-full py-2 rounded-md text-white transition ${scanning ? 'bg-red-500 hover:bg-red-600' : 'bg-trueblue hover:text-sparkyellow'
+            className={`mt-5 w-full py-2 font-semibold rounded-md transition text-white ${scanning
+              ? 'bg-red-500 hover:bg-red-600'
+              : 'bg-trueblue hover:bg-blue-800'
               }`}
           >
             {scanning ? 'Stop Scanning' : 'Start Scanning'}
           </button>
         </div>
 
-        {/* Items */}
-        <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-2xl">
-          <h2 className="text-xl font-bold text-trueblue mb-4 text-center">Scanned Items</h2>
-          <table className="w-full table-auto border-collapse border border-gray-300">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="border border-gray-300 px-4 py-2">ID</th>
-                <th className="border border-gray-300 px-4 py-2">Name</th>
-                <th className="border border-gray-300 px-4 py-2">Weight</th>
-                <th className="border border-gray-300 px-4 py-2">Volume</th>
-                <th className="border border-gray-300 px-4 py-2">Quantity</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((item, i) => (
-                <tr key={i}>
-                  <td className="border px-4 py-2">{item.itemId}</td>
-                  <td className="border px-4 py-2">{item.name}</td>
-                  <td className="border px-4 py-2">{item.weight} kg</td>
-                  <td className="border px-4 py-2">{item.volume} L</td>
-                  <td className="border px-4 py-2">{item.quantity}</td>
-                </tr>
-              ))}
-              {items.length === 0 && (
+        {/* Manual Entry */}
+        <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md transition hover:shadow-2xl">
+          <h2 className="text-lg font-semibold text-trueblue mb-4 text-center">✍️ Manual Entry</h2>
+          <label className="block mb-2 text-sm font-medium text-gray-700">Enter Item ID:</label>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={manualId}
+              onChange={(e) => setManualId(e.target.value)}
+              placeholder="e.g. 123456789012"
+              className="flex-grow px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-trueblue"
+            />
+            <button
+              onClick={handleManualAdd}
+              className="bg-trueblue text-white px-4 py-2 rounded-md hover:text-sparkyellow transition font-medium"
+            >
+              Add
+            </button>
+          </div>
+        </div>
+
+        {/* Scanned Items Table */}
+        <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-5xl transition hover:shadow-2xl">
+          <h2 className="text-xl font-semibold text-trueblue mb-4 text-center">📦 Scanned Items</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full table-auto border-collapse border border-gray-300 text-sm">
+              <thead className="bg-gray-100 text-gray-700">
                 <tr>
-                  <td colSpan="5" className="text-center py-4 text-gray-500">
-                    No items scanned yet
-                  </td>
+                  <th className="border px-4 py-2">ID</th>
+                  <th className="border px-4 py-2">Name</th>
+                  <th className="border px-4 py-2">Weight</th>
+                  <th className="border px-4 py-2">Volume</th>
+                  <th className="border px-4 py-2">Qty</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {items.length > 0 ? (
+                  items.map((item, i) => (
+                    <tr key={i} className="text-center">
+                      <td className="border px-4 py-2">{item.itemId}</td>
+                      <td className="border px-4 py-2">{item.name}</td>
+                      <td className="border px-4 py-2">{item.weight} kg</td>
+                      <td className="border px-4 py-2">{item.volume} L</td>
+                      <td className="border px-4 py-2">{item.quantity}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="text-center py-4 text-gray-500">
+                      No items scanned yet.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
           <button
             onClick={handleCalculate}
-            className="mt-6 w-full bg-trueblue text-white py-2 rounded-md hover:text-sparkyellow transition"
+            className="mt-6 w-full bg-trueblue text-white py-2 rounded-md hover:text-sparkyellow font-semibold transition"
           >
             Calculate Best Box
           </button>
