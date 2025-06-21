@@ -16,7 +16,6 @@ const ScanPage = () => {
   const fetchItemDetails = async (barcodeId) => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/items/${barcodeId}`);
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching item from DB:', error);

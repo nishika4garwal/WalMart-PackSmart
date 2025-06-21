@@ -19,6 +19,10 @@ const itemSchema = new mongoose.Schema({
         width: Number,
         length: Number, // in cm
     },
+    volume: {
+        type: Number, //in L
+        required: true,
+    },
     price: {
         type: Number,
         required: true,
