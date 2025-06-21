@@ -18,7 +18,17 @@ const ScanPage = () => {
       const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/items/${barcodeId}`);
       return response.data;
     } catch (error) {
-      console.error('Error fetching item from DB:', error);
+      if (error.response) {
+        if (error.response.status === 404) {
+          alert('❌ Item not found in the system.');
+        } else {
+          alert(`⚠️ Error: ${error.response.data.message || 'Something went wrong!'}`);
+        }
+      } else if (error.request) {
+        alert('🚫 No response from server. Please try again.');
+      } else {
+        alert('⚠️ Request error: ' + error.message);
+      }
       return null;
     }
   };
