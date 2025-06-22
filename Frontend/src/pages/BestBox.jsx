@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import instance from '../../axios';
 
 const BestBox = () => {
   const [box, setBox] = useState(null);
@@ -9,7 +9,7 @@ const BestBox = () => {
 
   const fetchBestBox = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/boxes/best`);
+      const response = await instance.get(`/boxes/best`);
       setBox(response.data);
       console.log("Fetched box:", response.data);
     } catch (error) {
