@@ -134,13 +134,27 @@ const ScanPage = () => {
   }, []);
 
   const handleCalculate = async () => {
-    try {
-      await axios.post(`${import.meta.env.VITE_BASE_URL}/box/predict`, { items });
-      navigate('/bestbox');
-    } catch (error) {
-      console.error('Error sending items to backend:', error);
-    }
-  };
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/boxes/predict`, {
+      items,
+    });
+
+    const { boxId, volume, maxWeightSupport } = response.data;
+
+    // Save only necessary data
+    localStorage.setItem('predictedBox', JSON.stringify({
+      boxId,
+      volume,
+      maxWeightSupport,
+    }));
+
+    navigate('/bestbox');
+
+  } catch (error) {
+    console.error('Error sending items to backend:', error);
+  }
+};
+
 
   return (
     <>
