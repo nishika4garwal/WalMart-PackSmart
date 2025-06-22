@@ -134,26 +134,26 @@ const ScanPage = () => {
   }, []);
 
   const handleCalculate = async () => {
-  try {
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/boxes/predict`, {
-      items,
-    });
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/boxes/predict`, {
+        items,
+      });
 
-    const { boxId, volume, maxWeightSupport } = response.data;
+      const { boxId, volume, maxWeightSupport } = response.data;
 
-    // Save only necessary data
-    localStorage.setItem('predictedBox', JSON.stringify({
-      boxId,
-      volume,
-      maxWeightSupport,
-    }));
+      // Save only necessary data
+      localStorage.setItem('predictedBox', JSON.stringify({
+        boxId,
+        volume,
+        maxWeightSupport,
+      }));
 
-    navigate('/bestbox');
+      navigate('/bestbox');
 
-  } catch (error) {
-    console.error('Error sending items to backend:', error);
-  }
-};
+    } catch (error) {
+      console.error('Error sending items to backend:', error);
+    }
+  };
 
 
   return (
@@ -222,7 +222,7 @@ const ScanPage = () => {
                       <td className="border px-4 py-2">{item.itemId}</td>
                       <td className="border px-4 py-2">{item.name}</td>
                       <td className="border px-4 py-2">{item.weight} kg</td>
-                      <td className="border px-4 py-2">{item.volume} L</td>
+                      <td className="border px-4 py-2">{item.volume} cm³</td>
                       <td className="border px-4 py-2">{item.quantity}</td>
                     </tr>
                   ))
