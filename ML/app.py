@@ -1,26 +1,29 @@
 from flask import Flask, request, jsonify
-import pickle
-import numpy as np
-from flask_cors import CORS # type: ignore
+import joblib  # ✅ use joblib to load model
+import pandas as pd
+from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS so frontend/backend can call this
+CORS(app)
 
-# Load your trained model
-with open('best_box_model.pkl', 'rb') as f:
-    model = pickle.load(f)
+# ✅ Load model with joblib
+model = joblib.load('best_box_model.pkl')
 
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json()
-    weight = data.get('weight')
-    volume = data.get('volume')
+    weight = data.get('total_weight')
+    volume = data.get('total_volume')
 
-    # Example input for model: [[weight, volume]]
-    prediction = model.predict([[weight, volume]])
-    return jsonify({'predicted_box': prediction[0]})
+    input_df = pd.DataFrame([{
+        'total_volume': volume,
+        'total_weight': weight
+    }])
 
-# Optional route to check server
+    prediction = model.predict(input_df)
+    print("Prediction input:", input_df)
+    return jsonify({'predicted_box': int(prediction[0])})
+
 @app.route('/')
 def home():
     return "ML API is running!"
