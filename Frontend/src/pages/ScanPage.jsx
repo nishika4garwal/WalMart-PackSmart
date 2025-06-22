@@ -14,6 +14,10 @@ const ScanPage = () => {
   const controlsRef = useRef(null);
   const navigate = useNavigate();
 
+  const saveItemsToStorage = (items) => {
+    localStorage.setItem('scannedItems', JSON.stringify(items));
+  };
+
   const fetchItemDetails = async (barcodeId) => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/items/${barcodeId}`);
@@ -45,7 +49,11 @@ const ScanPage = () => {
       const qty = prompt(`Enter quantity for ${item.name}:`, '1');
       const quantity = parseInt(qty);
       if (!isNaN(quantity) && quantity > 0) {
-        setItems((prev) => [...prev, { ...item, quantity }]);
+        setItems((prev) => {
+          const updated = [...prev, { ...item, quantity }];
+          saveItemsToStorage(updated);
+          return updated;
+        });
         setManualId('');
       } else {
         alert('Invalid quantity. Item not added.');
@@ -82,7 +90,11 @@ const ScanPage = () => {
             const qty = prompt(`Enter quantity for ${item.name}:`, '1');
             const quantity = parseInt(qty);
             if (!isNaN(quantity) && quantity > 0) {
-              setItems((prev) => [...prev, { ...item, quantity }]);
+              setItems((prev) => {
+                const updated = [...prev, { ...item, quantity }];
+                saveItemsToStorage(updated);
+                return updated;
+              });
             } else {
               alert('Invalid quantity. Item not added.');
             }
@@ -141,20 +153,18 @@ const ScanPage = () => {
 
       const { boxId, volume, maxWeightSupport } = response.data;
 
-      // Save only necessary data
       localStorage.setItem('predictedBox', JSON.stringify({
         boxId,
         volume,
         maxWeightSupport,
       }));
 
+      saveItemsToStorage(items); // ✅ ensure items are stored before navigating
       navigate('/bestbox');
-
     } catch (error) {
       console.error('Error sending items to backend:', error);
     }
   };
-
 
   return (
     <>
