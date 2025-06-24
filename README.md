@@ -102,7 +102,8 @@ npm run dev
 
 ## 📸 Screenshots
 
-*To be added soon...*
+![image](https://github.com/user-attachments/assets/1cce61b4-9b22-4bad-8ccc-7d334f62de32)
+*More to be added soon...*
 
 ---
 
