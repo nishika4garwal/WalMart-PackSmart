@@ -146,27 +146,23 @@ const ScanPage = () => {
   }, []);
 
   const handleCalculate = async () => {
-    try {
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/boxes/predict`, {
-        items,
-      });
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/boxes/predict`, {
+      items
+    });
 
-      const { boxId, volume, maxWeightSupport } = response.data;
+    const predictedBox = response.data;
 
-      localStorage.setItem('predictedBox', JSON.stringify({
-        boxId,
-        volume,
-        maxWeightSupport,
-      }));
+    localStorage.setItem('predictedBox', JSON.stringify(predictedBox));
+    saveItemsToStorage(items);
+    navigate('/bestbox');
+  } catch (error) {
+    console.error('Error calculating best box:', error);
+    alert('⚠️ Failed to predict best box.');
+  }
+};
 
-      saveItemsToStorage(items); // ✅ ensure items are stored before navigating
-      navigate('/bestbox');
-    } catch (error) {
-      console.error('Error sending items to backend:', error);
-    }
-  };
-
-  return (
+return (
     <>
       <Navbar />
       <div className="min-h-screen bg-gradient-to-br from-[#fefefe] to-[#f1f5ff] px-6 py-10 flex flex-wrap justify-center gap-8 items-start">
