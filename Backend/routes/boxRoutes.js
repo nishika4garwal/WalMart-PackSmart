@@ -17,7 +17,6 @@ router.post("/predict", async (req, res) => {
   try {
     const items = req.body.items;
 
-    // Aggregate item features
     let total_weight = 0;
     let total_volume = 0;
     let total_quantity = 0;
@@ -63,38 +62,39 @@ router.post("/predict", async (req, res) => {
     const response = await axios.post(`${process.env.ML_URL}/predict`, features);
     const { length, width, height, max_weight } = response.data;
 
-    const ceilLength = Math.ceil(length);
-    const ceilWidth = Math.ceil(width);
-    const ceilHeight = Math.ceil(height);
-    const ceilWeight = Math.ceil(max_weight);
+    const allBoxes = await Box.find({});
 
-    const box = await Box.findOne({
-      length: { $gte: ceilLength },
-      width: { $gte: ceilWidth },
-      height: { $gte: ceilHeight },
-      maxWeightSupport: { $gte: ceilWeight }
-    }).sort({
-      length: 1,
-      width: 1,
-      height: 1,
-      maxWeightSupport: 1
-    });
-
-    if (!box) {
-      return res.status(404).json({ error: "Predicted box not found in DB" });
+    if (!allBoxes.length) {
+      return res.status(404).json({ error: "No boxes found in DB" });
     }
-    
+
+    let bestBox = allBoxes[0];
+    let bestScore = Infinity;
+
+    for (const b of allBoxes) {
+      const score =
+        Math.abs(b.length - length) +
+        Math.abs(b.width - width) +
+        Math.abs(b.height - height) +
+        Math.abs(b.maxWeightSupport - max_weight);
+
+      if (score < bestScore) {
+        bestScore = score;
+        bestBox = b;
+      }
+    }
+
     res.json({
-      boxId: box.boxId,
-      length: box.length,
-      width: box.width,
-      height: box.height,
-      volume: box.length * box.width * box.height,
-      maxWeightSupport: box.maxWeightSupport,
-      materialType: box.materialType,
-      co2Footprint: box.co2Footprint,
-      reusable: box.reusable,
-      madeOfRecycledMaterial: box.madeOfRecycledMaterial,
+      boxId: bestBox.boxId,
+      length: bestBox.length,
+      width: bestBox.width,
+      height: bestBox.height,
+      volume: bestBox.length * bestBox.width * bestBox.height,
+      maxWeightSupport: bestBox.maxWeightSupport,
+      materialType: bestBox.materialType,
+      co2Footprint: bestBox.co2Footprint,
+      reusable: bestBox.reusable,
+      madeOfRecycledMaterial: bestBox.madeOfRecycledMaterial,
     });
 
   } catch (error) {
