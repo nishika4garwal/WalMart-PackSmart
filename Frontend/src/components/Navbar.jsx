@@ -5,16 +5,15 @@ import logo from '../assets/logo.png';
 
 const Navbar = () => {
   return (
-    <nav className="bg-trueblue text-white px-4 py-2 shadow-md flex justify-between items-center h-20">
+    <nav className="fixed top-0 left-0 w-full h-20 bg-trueblue text-white px-4 shadow-md flex justify-between items-center z-50">
       <div className="flex items-center space-x-4 h-full">
-        <img src={logo}
+        <img
+          src={logo}
           alt="Walmart Logo"
           className="max-h-full w-auto object-contain"
         />
         <span className="text-xl hover:text-sparkyellow font-semibold">
-          <Link to="/home">
-            Admin Dashboard
-          </Link>
+          <Link to="/home">Admin Dashboard</Link>
         </span>
       </div>
       <div className="flex space-x-6">
@@ -31,7 +30,6 @@ const Navbar = () => {
           Logout
         </Link>
       </div>
-
     </nav>
   );
 };

@@ -146,26 +146,26 @@ const ScanPage = () => {
   }, []);
 
   const handleCalculate = async () => {
-  try {
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/boxes/predict`, {
-      items
-    });
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/boxes/predict`, {
+        items
+      });
 
-    const predictedBox = response.data;
+      const predictedBox = response.data;
 
-    localStorage.setItem('predictedBox', JSON.stringify(predictedBox));
-    saveItemsToStorage(items);
-    navigate('/bestbox');
-  } catch (error) {
-    console.error('Error calculating best box:', error);
-    alert('⚠️ Failed to predict best box.');
-  }
-};
+      localStorage.setItem('predictedBox', JSON.stringify(predictedBox));
+      saveItemsToStorage(items);
+      navigate('/bestbox');
+    } catch (error) {
+      console.error('Error calculating best box:', error);
+      alert('⚠️ Failed to predict best box.');
+    }
+  };
 
-return (
+  return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-[#fefefe] to-[#f1f5ff] px-6 py-10 flex flex-wrap justify-center gap-8 items-start">
+      <div className="pt-20 min-h-screen bg-gradient-to-br from-[#fefefe] to-[#f1f5ff] px-6 py-10 flex flex-wrap justify-center gap-8 items-start">
         {/* Scanner Box */}
         <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md transition hover:shadow-2xl">
           <h2 className="text-xl font-semibold text-trueblue mb-4 text-center">📷 Scan Barcode</h2>
