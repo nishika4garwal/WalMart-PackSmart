@@ -10,11 +10,10 @@ const Last = () => {
   const [summary, setSummary] = useState([]);
   const navigate = useNavigate();
 
-  // Show success toast when page loads
   useEffect(() => {
     toast.success('Packaging done!', {
       position: 'top-center',
-      autoClose: 3000
+      autoClose: 3000,
     });
 
     fetchData();
@@ -28,19 +27,24 @@ const Last = () => {
       if (!items.length || !box) {
         throw new Error('Missing itemIds or boxId in localStorage');
       }
-      console.log(box);
-      console.log(items);
-      const parsedBox = JSON.parse(box);
-      const totalCO2Score = (parsedBox.co2Footprint || 0) + items.reduce((sum, item) => sum + (item.estimatedCO2 || 0) * (item.quantity || 1), 0);
-      console.log(totalCO2Score);
-      const recyclabilityScore = (parsedBox.madeOfRecycledMaterial === "yes" ? 10 : -3) + items.reduce((sum, item) => sum + (item.recyclable ? 15 : -5) * (item.quantity || 1), 0);
-      console.log(recyclabilityScore);
-      const biodegradabilityScore = (parsedBox.reusable === "yes" ? 10 : -2) + items.reduce((sum, item) => sum + (item.biodegradable ? 10 : -3) * (item.quantity || 1), 0);
-      console.log(biodegradabilityScore);
-      const plasticPenalty = (parsedBox.materialType === "Plastic" ? -5 : 0) + items.reduce((sum, item) => sum + (item.plasticUsed ? -7 : 0) * (item.quantity || 1), 0);
-      console.log(plasticPenalty);
 
-      // Calculate and set final score
+      const parsedBox = JSON.parse(box);
+      const totalCO2Score =
+        (parsedBox.co2Footprint || 0) +
+        items.reduce((sum, item) => sum + (item.estimatedCO2 || 0) * (item.quantity || 1), 0);
+
+      const recyclabilityScore =
+        (parsedBox.madeOfRecycledMaterial === 'yes' ? 10 : -3) +
+        items.reduce((sum, item) => sum + (item.recyclable ? 15 : -5) * (item.quantity || 1), 0);
+
+      const biodegradabilityScore =
+        (parsedBox.reusable === 'yes' ? 10 : -2) +
+        items.reduce((sum, item) => sum + (item.biodegradable ? 10 : -3) * (item.quantity || 1), 0);
+
+      const plasticPenalty =
+        (parsedBox.materialType === 'Plastic' ? -5 : 0) +
+        items.reduce((sum, item) => sum + (item.plasticUsed ? -7 : 0) * (item.quantity || 1), 0);
+
       const calculatedScore =
         (100 - totalCO2Score) * 0.5 +
         recyclabilityScore * 0.2 +
@@ -50,23 +54,14 @@ const Last = () => {
       setScore(Math.max(0, Math.min(100, Math.round(calculatedScore))));
 
       setSummary([
-        `Box Type: ${parsedBox.boxId ? "EcoBox " + parsedBox.boxId : "No such data"}`,
-        `Label: ${parsedBox.label || "No such data"}`,
-        `Materials: ${parsedBox.materialType
-          ? parsedBox.materialType + (parsedBox.layerMaterials?.length ? ", " + parsedBox.layerMaterials.join(", ") : "")
-          : parsedBox.layerMaterials?.length
-            ? parsedBox.layerMaterials.join(", ")
-            : "No such data"
-        }`
+        parsedBox.boxId ? `Box Type: EcoBox ${parsedBox.boxId}` : 'Box Type: No such data',
       ]);
-
     } catch (error) {
       console.error('Error fetching summary:', error);
       setScore(0);
       setSummary(['Failed to load summary.']);
     }
   };
-
 
   const getFeedback = () => {
     if (score >= 80) return '🎉 Yay! You contributed to the Earth!';
@@ -79,30 +74,41 @@ const Last = () => {
       <Navbar />
       <ToastContainer />
 
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBFB] to-[#EBEDFF] flex flex-col items-center justify-center px-4">
+      <div className="min-h-screen bg-[#EBEDFF] flex flex-col items-center justify-center px-4 relative overflow-hidden">
         {/* Decorative Background */}
-        <div className="absolute w-96 h-96 bg-trueblue opacity-30 rounded-full blur-3xl top-10 left-[-100px]"></div>
-        <div className="absolute w-96 h-96 bg-trueblue opacity-30 rounded-full blur-3xl top-10 right-[-100px]"></div>
+        <div className="absolute w-80 h-80 bg-trueblue opacity-30 rounded-full blur-3xl top-[-50px] left-[-80px] z-0"></div>
+        <div className="absolute w-80 h-80 bg-trueblue opacity-30 rounded-full blur-3xl bottom-[-50px] right-[-80px] z-0"></div>
 
-        {/* Score and Summary Card */}
-        <div className="relative z-10 bg-sparkyellow rounded-2xl shadow-xl max-w-xl w-full p-8 text-center">
-          <h2 className="text-2xl font-bold text-trueblue mb-4">Packaging Summary</h2>
+        {/* Main Card */}
+        <div className="relative z-10 bg-sparkyellow rounded-2xl shadow-xl max-w-xl w-full p-8 text-center animate-fade-in-up">
+          <h2 className="text-3xl font-bold text-trueblue mb-4">🌿 Packaging Summary</h2>
 
-          {/* Score */}
-          <p className="text-xl text-gray-800 mb-2 font-medium">🌍 Sustainability Score: <span className="font-bold text-trueblue">{score}</span></p>
+          {/* Score Display */}
+          <p className="text-lg text-gray-800 mb-1">
+            🌍 <span className="font-medium">Sustainability Score:</span>{' '}
+            <span className="text-2xl text-trueblue font-bold">{score}</span>
+          </p>
+
           <p className="text-md text-gray-700 italic mb-6">{getFeedback()}</p>
 
-          {/* Summary List */}
-          <div className="text-left text-gray-700 bg-white rounded-lg p-4 shadow-inner mb-6">
-            <h3 className="text-lg font-semibold mb-2 text-trueblue">Items Used:</h3>
-            <ul className="list-disc list-inside space-y-1">
-              {summary.map((item, idx) => (
-                <li key={idx}>{item}</li>
-              ))}
-            </ul>
+          {/* Summary Section */}
+          <div className="text-left text-gray-700 bg-white rounded-lg p-5 shadow-inner space-y-2 mb-6">
+            <h3 className="text-lg font-semibold mb-2 text-trueblue">Summary:</h3>
+
+            {/* Box Type (non-list) */}
+            <p className="font-medium">{summary[0]}</p>
+
+            {/* Additional summary items as list (if needed later) */}
+            {summary.slice(1).length > 0 && (
+              <ul className="list-disc list-inside">
+                {summary.slice(1).map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            )}
           </div>
 
-          {/* Back to Home Button */}
+          {/* Button */}
           <button
             onClick={() => navigate('/home')}
             className="bg-trueblue text-white font-semibold px-6 py-2 rounded-md hover:text-sparkyellow transition duration-300"

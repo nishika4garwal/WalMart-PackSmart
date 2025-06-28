@@ -18,9 +18,11 @@ router.get("/", async (req, res) => {
     try {
         const labels = await Label.find();
         res.json(labels);
+        console.log(labels);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
+
 
 module.exports = router;
