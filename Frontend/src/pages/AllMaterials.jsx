@@ -1,65 +1,64 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 const AllMaterials = () => {
   const [materials, setMaterials] = useState([]);
   const navigate = useNavigate();
 
-  // Function to fetch material data from backend
-  const fetchMaterials = async () => {
+  const fetchMaterialsFromLocalStorage = () => {
     try {
-      // Replace this with actual backend call:
-      // const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/materials`);
-      // setMaterials(response.data);
+      const itemsJSON = localStorage.getItem('scannedItems');
+      if (!itemsJSON) {
+        setMaterials(['No items found in storage.']);
+        return;
+      }
 
-      // For now, use mock data
-      const mockData = [
-        'Corrugated Box',
-        'Biodegradable Bubble Wrap',
-        'Paper Tape',
-        'Recyclable Air Cushion',
-        'Compostable Fillers'
-      ];
-      setMaterials(mockData);
+      const items = JSON.parse(itemsJSON);
+      const allMaterials = items.flatMap(item => item.layerMaterials || []);
+      const uniqueMaterials = [...new Set(allMaterials)];
+      setMaterials(uniqueMaterials);
     } catch (error) {
-      console.error('Error fetching materials:', error);
-      setMaterials(['Unable to load materials.']);
+      console.error('Error reading from localStorage:', error);
+      setMaterials(['Error loading materials.']);
     }
   };
 
   useEffect(() => {
-    fetchMaterials();
+    fetchMaterialsFromLocalStorage();
   }, []);
 
   return (
     <>
       <Navbar />
+      <div className="min-h-screen bg-blue-700 flex items-center justify-center p-6">
+        <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-8">
 
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBFB] to-[#EBEDFF] flex flex-col items-center justify-center px-4">
-        {/* Decorative Background */}
-        <div className="absolute w-96 h-96 bg-trueblue opacity-30 rounded-full blur-3xl top-10 left-[-100px]"></div>
-        <div className="absolute w-96 h-96 bg-trueblue opacity-30 rounded-full blur-3xl top-10 right-[-100px]"></div>
+          <h2 className="text-3xl font-bold text-blue-700 mb-6 text-center">Materials to Use</h2>
 
-        {/* Material List Card */}
-        <div className="bg-[#DDEEDF] rounded-2xl shadow-xl max-w-lg w-full p-8 text-center relative z-10">
-          <h2 className="text-2xl font-bold text-trueblue mb-4">Materials to Use</h2>
+          {materials.length > 0 ? (
+            <div className="flex flex-wrap justify-center gap-4 mb-6">
+              {materials.map((material, index) => (
+                <span
+                  key={index}
+                  className="bg-yellow-400 text-black font-medium px-4 py-2 shadow hover:shadow-md transition"
+                >
+                  {material}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-gray-500 mb-6">No materials found.</p>
+          )}
 
-          {/* Display materials */}
-          <ul className="text-gray-700 text-left list-disc list-inside space-y-2 mb-6">
-            {materials.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-
-          {/* Complete Packaging Button */}
-          <button
-            onClick={() => navigate('/last')}
-            className="bg-sparkyellow text-black font-semibold px-6 py-2 rounded-md hover:bg-trueblue hover:text-white transition duration-300"
-          >
-            Complete Packaging
-          </button>
+          <div className="flex justify-center">
+            <button
+              onClick={() => navigate('/last')}
+              className="px-6 py-2 bg-blue-700 text-white rounded-md font-semibold hover:text-yellow-400 transition"
+            >
+              Complete Packaging
+            </button>
+          </div>
         </div>
       </div>
     </>
