@@ -59,7 +59,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0] min-h-screen">
+      <div className="pt-20 bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0] min-h-screen">
         {/* Hero Section */}
         <div className="bg-trueblue text-white py-16 px-6 text-center shadow-md">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">

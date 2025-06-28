@@ -20,21 +20,46 @@ const Last = () => {
     fetchData();
   }, []);
 
-  // Simulate backend call
   const fetchData = async () => {
     try {
-      // Replace with actual API:
-      // const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/summary`);
-      // setScore(response.data.score);
-      // setSummary(response.data.summary);
+      const items = JSON.parse(localStorage.getItem('scannedItems')) || [];
+      const box = localStorage.getItem('predictedBox');
 
-      // Mock data
-      setScore(85); // mock score
+      if (!items.length || !box) {
+        throw new Error('Missing itemIds or boxId in localStorage');
+      }
+      console.log(box);
+      console.log(items);
+      const parsedBox = JSON.parse(box);
+      const totalCO2Score = (parsedBox.co2Footprint || 0) + items.reduce((sum, item) => sum + (item.estimatedCO2 || 0) * (item.quantity || 1), 0);
+      console.log(totalCO2Score);
+      const recyclabilityScore = (parsedBox.madeOfRecycledMaterial === "yes" ? 10 : -3) + items.reduce((sum, item) => sum + (item.recyclable ? 15 : -5) * (item.quantity || 1), 0);
+      console.log(recyclabilityScore);
+      const biodegradabilityScore = (parsedBox.reusable === "yes" ? 10 : -2) + items.reduce((sum, item) => sum + (item.biodegradable ? 10 : -3) * (item.quantity || 1), 0);
+      console.log(biodegradabilityScore);
+      const plasticPenalty = (parsedBox.materialType === "Plastic" ? -5 : 0) + items.reduce((sum, item) => sum + (item.plasticUsed ? -7 : 0) * (item.quantity || 1), 0);
+      console.log(plasticPenalty);
+
+      // Calculate and set final score
+      const calculatedScore =
+        (100 - totalCO2Score) * 0.5 +
+        recyclabilityScore * 0.2 +
+        biodegradabilityScore * 0.2 +
+        plasticPenalty * 0.1;
+
+      setScore(Math.max(0, Math.min(100, Math.round(calculatedScore))));
+
       setSummary([
-        'Box Type: EcoBox Small',
-        'Label: Fragile - Handle With Care',
-        'Materials: Corrugated Box, Paper Tape, Biodegradable Wrap'
+        `Box Type: ${parsedBox.boxId ? "EcoBox " + parsedBox.boxId : "No such data"}`,
+        `Label: ${parsedBox.label || "No such data"}`,
+        `Materials: ${parsedBox.materialType
+          ? parsedBox.materialType + (parsedBox.layerMaterials?.length ? ", " + parsedBox.layerMaterials.join(", ") : "")
+          : parsedBox.layerMaterials?.length
+            ? parsedBox.layerMaterials.join(", ")
+            : "No such data"
+        }`
       ]);
+
     } catch (error) {
       console.error('Error fetching summary:', error);
       setScore(0);
@@ -42,9 +67,9 @@ const Last = () => {
     }
   };
 
-  // Generate feedback based on score
+
   const getFeedback = () => {
-    if (score >= 100) return '🎉 Yay! You contributed to the Earth!';
+    if (score >= 80) return '🎉 Yay! You contributed to the Earth!';
     if (score >= 50) return '🌱 Good effort, but there\'s room to grow!';
     return '⚠️ Oh no! Try better next time!';
   };
