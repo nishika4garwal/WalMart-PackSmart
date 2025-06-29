@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
+import bg from '../assets/bg page.png';
 
 const AllMaterials = () => {
   const [materials, setMaterials] = useState([]);
@@ -31,7 +32,11 @@ const AllMaterials = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-blue-700 flex items-center justify-center p-6">
+      <div
+        className="min-h-screen bg-cover bg-center flex items-center justify-center p-6"
+        style={{ backgroundImage: `url(${bg})` }}
+      >
+
         <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-8">
 
           <h2 className="text-3xl font-bold text-blue-700 mb-6 text-center">Materials to Use</h2>

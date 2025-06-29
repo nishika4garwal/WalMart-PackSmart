@@ -3,7 +3,8 @@ import logo from '../assets/logo.png';
 import { Link } from 'react-router-dom';
 import instance from '../../axios';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff } from 'lucide-react'; // Optional: Replace with any icon or plain text
+import { Eye, EyeOff } from 'lucide-react';
+import bgImg from '../assets/walmart bg.png';
 
 const Login = () => {
   const [email, setEmail] = React.useState('');
@@ -34,9 +35,12 @@ const Login = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-[#FDFBFB] to-[#EBEDFF] flex items-center justify-center px-4 overflow-hidden">
-      <div className="absolute w-96 h-96 bg-trueblue opacity-30 rounded-full blur-3xl top-10 left-[-100px]"></div>
-      <div className="absolute w-96 h-96 bg-trueblue opacity-30 rounded-full blur-3xl top-10 right-[-100px]"></div>
+    <div
+      className="relative min-h-screen flex items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: `url(${bgImg})` }}
+    >
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black opacity-60 z-0" />
 
       <div className="relative z-10 bg-sparkyellow rounded-2xl shadow-2xl w-full max-w-md p-8 flex flex-col items-center">
         <img

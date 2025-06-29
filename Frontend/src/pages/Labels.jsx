@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import instance from '../../axios';
+import bg from '../assets/bg page.png';
 
 const Labels = () => {
   const [matchedLabels, setMatchedLabels] = useState([]);
@@ -39,7 +40,11 @@ const Labels = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-blue-700 flex items-center justify-center p-6">
+      <div
+      className="min-h-screen bg-cover bg-center flex items-center justify-center p-6"
+      style={{ backgroundImage: `url(${bg})` }}
+      >
+
         <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-8 text-center">
           <h2 className="text-3xl font-bold text-blue-700 mb-6">🏷️ Label(s) to Put</h2>
 

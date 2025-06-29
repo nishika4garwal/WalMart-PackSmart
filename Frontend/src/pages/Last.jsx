@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import bg from '../assets/bg page last.png';
 
 const Last = () => {
   const [score, setScore] = useState(null);
@@ -74,10 +75,10 @@ const Last = () => {
       <Navbar />
       <ToastContainer />
 
-      <div className="min-h-screen bg-[#EBEDFF] flex flex-col items-center justify-center px-4 relative overflow-hidden">
-        {/* Decorative Background */}
-        <div className="absolute w-80 h-80 bg-trueblue opacity-30 rounded-full blur-3xl top-[-50px] left-[-80px] z-0"></div>
-        <div className="absolute w-80 h-80 bg-trueblue opacity-30 rounded-full blur-3xl bottom-[-50px] right-[-80px] z-0"></div>
+      <div
+      className="min-h-screen bg-cover bg-center flex items-center justify-center p-6"
+      style={{ backgroundImage: `url(${bg})` }}
+      >
 
         {/* Main Card */}
         <div className="relative z-10 bg-sparkyellow rounded-2xl shadow-xl max-w-xl w-full p-8 text-center animate-fade-in-up">
