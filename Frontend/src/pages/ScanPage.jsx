@@ -4,6 +4,7 @@ import { BrowserMultiFormatReader } from '@zxing/browser';
 import { DecodeHintType, BarcodeFormat } from '@zxing/library';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import bg from '../assets/bg page.png';
 
 const ScanPage = () => {
   const [items, setItems] = useState([]);
@@ -173,47 +174,53 @@ const ScanPage = () => {
   return (
     <>
       <Navbar />
-      <div className="pt-20 min-h-screen bg-gradient-to-br from-[#fefefe] to-[#f1f5ff] px-6 py-10 flex flex-wrap justify-center gap-8 items-start">
-        {/* Scanner Box */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md transition hover:shadow-2xl">
-          <h2 className="text-xl font-semibold text-trueblue mb-4 text-center">📷 Scan Barcode</h2>
-          <video
-            ref={videoRef}
-            className="w-full h-60 object-cover rounded-md bg-black"
-            muted
-            playsInline
-          />
-          <button
-            onClick={handleToggleScan}
-            className={`mt-5 w-full py-2 font-semibold rounded-md transition text-white ${scanning
-              ? 'bg-red-500 hover:bg-red-600'
-              : 'bg-trueblue hover:bg-blue-800'
-              }`}
-          >
-            {scanning ? 'Stop Scanning' : 'Start Scanning'}
-          </button>
-        </div>
+      <div
+        className="min-h-screen bg-cover bg-center px-6 py-10"
+        style={{ backgroundImage: `url(${bg})` }}
+      >
+        <div className="flex flex-wrap justify-center gap-8 items-start pt-20">
 
-        {/* Manual Entry */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md transition hover:shadow-2xl">
-          <h2 className="text-lg font-semibold text-trueblue mb-4 text-center">Manual Entry</h2>
-          <label className="block mb-2 text-sm font-medium text-gray-700">Enter Item ID:</label>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={manualId}
-              onChange={(e) => setManualId(e.target.value)}
-              placeholder="e.g. 123456789012"
-              className="flex-grow px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-trueblue"
+          
+          {/* Scanner Box */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md transition hover:shadow-2xl">
+            <h2 className="text-xl font-semibold text-trueblue mb-4 text-center">📷 Scan Barcode</h2>
+            <video
+              ref={videoRef}
+              className="w-full h-60 object-cover rounded-md bg-black"
+              muted
+              playsInline
             />
             <button
-              onClick={handleManualAdd}
-              className="bg-trueblue text-white px-4 py-2 rounded-md hover:text-sparkyellow transition font-medium"
+              onClick={handleToggleScan}
+              className={`mt-5 w-full py-2 font-semibold rounded-md transition text-white ${scanning
+                ? 'bg-red-500 hover:bg-red-600'
+                : 'bg-trueblue hover:bg-blue-800'
+                }`}
             >
-              Add
+              {scanning ? 'Stop Scanning' : 'Start Scanning'}
             </button>
           </div>
-        </div>
+
+          {/* Manual Entry */}
+          <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md transition hover:shadow-2xl">
+            <h2 className="text-lg font-semibold text-trueblue mb-4 text-center">Manual Entry</h2>
+            <label className="block mb-2 text-sm font-medium text-gray-700">Enter Item ID:</label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={manualId}
+                onChange={(e) => setManualId(e.target.value)}
+                placeholder="e.g. 123456789012"
+                className="flex-grow px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-trueblue"
+              />
+              <button
+                onClick={handleManualAdd}
+                className="bg-trueblue text-white px-4 py-2 rounded-md hover:text-sparkyellow transition font-medium"
+              >
+                Add
+              </button>
+            </div>
+          </div>
 
         {/* Scanned Items Table */}
         <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-5xl transition hover:shadow-2xl">

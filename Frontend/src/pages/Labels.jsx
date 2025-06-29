@@ -49,21 +49,22 @@ const Labels = () => {
           <h2 className="text-3xl font-bold text-blue-700 mb-6">🏷️ Label(s) to Put</h2>
 
           {matchedLabels.length > 0 ? (
-            <ul className="space-y-4 text-left max-w-md mx-auto">
-              {matchedLabels.map((label, index) => (
-                <li key={index} className="flex items-center gap-3">
-                  <img
-                    src={`${import.meta.env.VITE_ASSET_URL}${label.icon}`}
-                    alt="icon"
-                    className="w-6 h-6"
-                  />
-                  <span className="text-gray-800 font-medium">{label.name}</span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-gray-600">No specific labels matched. Use general safety labels.</p>
-          )}
+  <ul className="space-y-4 flex flex-col items-center">
+    {matchedLabels.map((label, index) => (
+      <li key={index} className="flex items-center gap-3 justify-center">
+        <img
+          src={`${import.meta.env.VITE_ASSET_URL}${label.icon}`}
+          alt="icon"
+          className="w-6 h-6"
+        />
+        <span className="text-gray-800 font-medium">{label.name}</span>
+      </li>
+    ))}
+  </ul>
+) : (
+  <p className="text-gray-600">No specific labels matched. Use general safety labels.</p>
+)}
+
 
           <button
             onClick={() => navigate('/materials')}
