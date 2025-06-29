@@ -102,7 +102,37 @@ const Summary = () => {
     fetchData();
   }, []);
 
-  // 🏷️ Custom Icon + Name Tick
+  // Sustainability Goals
+  const goals = [
+    {
+      title: "📦 Sustainable Packaging",
+      goal: "100% recyclable, reusable or compostable packaging by 2025",
+      achieved: recyclableData.length
+        ? ((recyclableData[0].value / 100) * 100).toFixed(2)
+        : "0",
+      source: "Walmart Sustainability Report 2024",
+    },
+    {
+      title: "🌍 CO₂ Reduction",
+      goal: "Reduce emissions by 35% (Scope 1 & 2) by 2025",
+      achieved: co2Data.length
+        ? (() => {
+            const total = co2Data.reduce((sum, o) => sum + o.co2, 0);
+            const avg = total / co2Data.length;
+            const estimatedBase = 100; // Assume a baseline of 100 units
+            return ((1 - avg / estimatedBase) * 100).toFixed(2);
+          })()
+        : "0",
+      source: "Project Gigaton Initiative",
+    },
+    {
+      title: "🏷️ Labeling Accuracy",
+      goal: "Consistent eco-labeling on all products",
+      achieved: labelUsage.length,
+      source: "Walmart Private Brands Strategy",
+    },
+  ];
+
   const IconTick = ({ x, y, payload }) => {
     const label = labelUsage.find((l) => l.icon === payload.value);
     return (
@@ -129,6 +159,32 @@ const Summary = () => {
         <h2 className="text-3xl font-bold text-gray-800 mb-6">
           📦 Order Summary & Sustainability Insights
         </h2>
+
+        {/* Walmart Goals */}
+        <div className="bg-white shadow-md rounded-xl p-6 border mb-8">
+          <h3 className="text-2xl font-bold text-gray-700 mb-4">🎯 Walmart Sustainability Goals</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {goals.map((g, idx) => (
+              <div key={idx} className="p-4 bg-gray-50 rounded-lg border">
+                <h4 className="text-lg font-semibold text-gray-800">{g.title}</h4>
+                <p className="text-sm text-gray-600 mt-1">Goal: {g.goal}</p>
+                <p className="mt-2 font-bold text-green-600">
+                  Achieved: {g.achieved}
+                  {typeof g.achieved === "string" && g.achieved.includes("%") ? "%" : ""}
+                </p>
+                <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                  <div
+                    className="bg-green-500 h-2.5 rounded-full"
+                    style={{ width: `${g.achieved}%` }}
+                  ></div>
+                </div>
+                <p className="text-xs text-gray-400 mt-1 italic">({g.source})</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Charts Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* ♻️ Recyclability Ratio */}
           <div className="bg-white shadow-md rounded-xl p-6 border">
