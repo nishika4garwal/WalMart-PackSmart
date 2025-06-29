@@ -62,6 +62,14 @@ const ScanPage = () => {
     }
   };
 
+  const handleRemoveItem = (index) => {
+    const updated = [...items];
+    updated.splice(index, 1);
+    setItems(updated);
+    saveItemsToStorage(updated);
+  };
+
+
   const startScanner = async () => {
     if (codeReaderRef.current) return;
     const hints = new Map();
@@ -214,48 +222,56 @@ const ScanPage = () => {
             </div>
           </div>
 
-          {/* Scanned Items Table */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-5xl transition hover:shadow-2xl">
-            <h2 className="text-xl font-semibold text-trueblue mb-4 text-center">📦 Scanned Items</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full table-auto border-collapse border border-gray-300 text-sm">
-                <thead className="bg-gray-100 text-gray-700">
-                  <tr>
-                    <th className="border px-4 py-2">ID</th>
-                    <th className="border px-4 py-2">Name</th>
-                    <th className="border px-4 py-2">Weight</th>
-                    <th className="border px-4 py-2">Volume</th>
-                    <th className="border px-4 py-2">Qty</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {items.length > 0 ? (
-                    items.map((item, i) => (
-                      <tr key={i} className="text-center">
-                        <td className="border px-4 py-2">{item.itemId}</td>
-                        <td className="border px-4 py-2">{item.name}</td>
-                        <td className="border px-4 py-2">{item.weight} kg</td>
-                        <td className="border px-4 py-2">{item.volume} cm³</td>
-                        <td className="border px-4 py-2">{item.quantity}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="5" className="text-center py-4 text-gray-500">
-                        No items scanned yet.
+        {/* Scanned Items Table */}
+        <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-5xl transition hover:shadow-2xl">
+          <h2 className="text-xl font-semibold text-trueblue mb-4 text-center">📦 Scanned Items</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full table-auto border-collapse border border-gray-300 text-sm">
+              <thead className="bg-gray-100 text-gray-700">
+                <tr>
+                  <th className="border px-4 py-2">ID</th>
+                  <th className="border px-4 py-2">Name</th>
+                  <th className="border px-4 py-2">Weight</th>
+                  <th className="border px-4 py-2">Volume</th>
+                  <th className="border px-4 py-2">Qty</th>
+                  <th className="border px-4 py-2">Action</th> {/* New Column */}
+                </tr>
+              </thead>
+              <tbody>
+                {items.length > 0 ? (
+                  items.map((item, i) => (
+                    <tr key={i} className="text-center">
+                      <td className="border px-4 py-2">{item.itemId}</td>
+                      <td className="border px-4 py-2">{item.name}</td>
+                      <td className="border px-4 py-2">{item.weight} kg</td>
+                      <td className="border px-4 py-2">{item.volume} cm³</td>
+                      <td className="border px-4 py-2">{item.quantity}</td>
+                      <td className="border px-4 py-2">
+                        <button
+                          onClick={() => handleRemoveItem(i)}
+                          className="text-red-600 hover:text-red-800 font-semibold"
+                        >
+                          Remove
+                        </button>
                       </td>
                     </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-            <button
-              onClick={handleCalculate}
-              className="mt-6 w-full bg-trueblue text-white py-2 rounded-md hover:text-sparkyellow font-semibold transition"
-            >
-              Calculate Best Box
-            </button>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="text-center py-4 text-gray-500">
+                      No items scanned yet.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
+          <button
+            onClick={handleCalculate}
+            className="mt-6 w-full bg-trueblue text-white py-2 rounded-md hover:text-sparkyellow font-semibold transition"
+          >
+            Calculate Best Box
+          </button>
         </div>
       </div>
     </>
