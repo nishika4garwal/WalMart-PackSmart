@@ -39,8 +39,6 @@ const Login = () => {
       className="relative min-h-screen flex items-center justify-center bg-cover bg-center"
       style={{ backgroundImage: `url(${bgImg})` }}
     >
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black opacity-60 z-0" />
 
       <div className="relative z-10 bg-sparkyellow rounded-2xl shadow-2xl w-full max-w-md p-8 flex flex-col items-center">
         <img
