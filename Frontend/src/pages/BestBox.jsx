@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import boxImg from '../assets/boximg.png';
+import bg from '../assets/bg page.png';
 
 const BestBox = () => {
   const [box, setBox] = useState(null);
@@ -37,7 +38,10 @@ const BestBox = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-blue-700 flex items-center justify-center p-6">
+      <div
+            className="min-h-screen bg-cover bg-center flex items-center justify-center p-6"
+            style={{ backgroundImage: `url(${bg})` }}
+            >
         <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full flex flex-col lg:flex-row overflow-hidden">
 
           {/* Visual Section */}
