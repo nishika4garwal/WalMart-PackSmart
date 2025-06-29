@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -10,6 +10,7 @@ const Last = () => {
   const [score, setScore] = useState(null);
   const [summary, setSummary] = useState([]);
   const navigate = useNavigate();
+  const hasFetchedRef = useRef(false); // 🔐 to prevent duplicate API calls
 
   useEffect(() => {
     toast.success('Packaging done!', {
@@ -17,7 +18,11 @@ const Last = () => {
       autoClose: 3000,
     });
 
-    fetchData();
+    // only fetch once
+    if (!hasFetchedRef.current) {
+      fetchData();
+      hasFetchedRef.current = true;
+    }
   }, []);
 
   const fetchData = async () => {
@@ -31,6 +36,8 @@ const Last = () => {
       }
 
       const parsedBox = JSON.parse(box);
+
+      // Sustainability calculations
       const totalCO2Score =
         (parsedBox.co2Footprint || 0) +
         items.reduce((sum, item) => sum + (item.estimatedCO2 || 0) * (item.quantity || 1), 0);
@@ -53,19 +60,22 @@ const Last = () => {
         biodegradabilityScore * 0.2 +
         plasticPenalty * 0.1;
 
-      setScore(Math.max(0, Math.min(100, Math.round(calculatedScore))));
+      const finalScore = Math.max(0, Math.min(100, Math.round(calculatedScore)));
+      setScore(finalScore);
 
+      // Summary
       setSummary([
         parsedBox.boxId ? `Box Type: EcoBox ${parsedBox.boxId}` : 'Box Type: No such data',
       ]);
 
+      // Save order to backend
       const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/orders/storeOrder`, {
         items,
         box: parsedBox,
         employeeId
       });
 
-      console.log("Order saved:", res.data);
+      console.log('Order saved:', res.data);
     } catch (error) {
       console.error('Error fetching summary:', error);
       setScore(0);
@@ -74,9 +84,9 @@ const Last = () => {
   };
 
   const getFeedback = () => {
-    if (score >= 80) return '🎉 Yay! You contributed to the Earth!';
-    if (score >= 50) return '🌱 Good effort, but there\'s room to grow!';
-    return '⚠️ Oh no! Try better next time!';
+    if (score >= 80) return 'Excellent! You contributed to the Earth!';
+    if (score >= 50) return 'Good effort, but there\'s room to grow.';
+    return 'Try better next time.';
   };
 
   return (
@@ -88,27 +98,21 @@ const Last = () => {
         className="min-h-screen bg-cover bg-center flex items-center justify-center p-6"
         style={{ backgroundImage: `url(${bg})` }}
       >
-
-        {/* Main Card */}
         <div className="relative z-10 bg-sparkyellow rounded-2xl shadow-xl max-w-xl w-full p-8 text-center animate-fade-in-up">
-          <h2 className="text-3xl font-bold text-trueblue mb-4">🌿 Packaging Summary</h2>
+          <h2 className="text-3xl font-bold text-trueblue mb-4">Packaging Summary</h2>
 
-          {/* Score Display */}
           <p className="text-lg text-gray-800 mb-1">
-            🌍 <span className="font-medium">Sustainability Score:</span>{' '}
+            <span className="font-medium">Sustainability Score:</span>{' '}
             <span className="text-2xl text-trueblue font-bold">{score}</span>
           </p>
 
           <p className="text-md text-gray-700 italic mb-6">{getFeedback()}</p>
 
-          {/* Summary Section */}
           <div className="text-left text-gray-700 bg-white rounded-lg p-5 shadow-inner space-y-2 mb-6">
             <h3 className="text-lg font-semibold mb-2 text-trueblue">Summary:</h3>
 
-            {/* Box Type (non-list) */}
             <p className="font-medium">{summary[0]}</p>
 
-            {/* Additional summary items as list (if needed later) */}
             {summary.slice(1).length > 0 && (
               <ul className="list-disc list-inside">
                 {summary.slice(1).map((item, idx) => (
@@ -118,7 +122,6 @@ const Last = () => {
             )}
           </div>
 
-          {/* Button */}
           <button
             onClick={() => navigate('/home')}
             className="bg-trueblue text-white font-semibold px-6 py-2 rounded-md hover:text-sparkyellow transition duration-300"
