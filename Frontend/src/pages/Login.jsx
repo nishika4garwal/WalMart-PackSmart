@@ -23,6 +23,7 @@ const Login = () => {
       if (response.status === 200) {
         const data = response.data;
         localStorage.setItem('token', data.token);
+        localStorage.setItem('eid', data.employee.eid);
         navigate('/home');
       }
     } catch (err) {

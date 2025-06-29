@@ -7,31 +7,27 @@ const orderSchema = new mongoose.Schema({
         unique: true,
     },
     employeeId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Employee",
+        type: String,
         required: true,
     },
     itemIds: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Item",
+            type: Number,
+            required: true,
         },
     ],
     boxId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Box",
+        type: Number,
         required: true,
     },
     materialsUsed: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Material",
+            type: String,
         },
     ],
     labelsApplied: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Label",
+            type: String,
         },
     ],
     createdAt: {

@@ -24,9 +24,10 @@ const Last = () => {
     try {
       const items = JSON.parse(localStorage.getItem('scannedItems')) || [];
       const box = localStorage.getItem('predictedBox');
+      const employeeId = localStorage.getItem('eid');
 
-      if (!items.length || !box) {
-        throw new Error('Missing itemIds or boxId in localStorage');
+      if (!items.length || !box || !employeeId) {
+        throw new Error('Missing itemIds or boxId or employeeId in localStorage');
       }
 
       const parsedBox = JSON.parse(box);
@@ -57,6 +58,14 @@ const Last = () => {
       setSummary([
         parsedBox.boxId ? `Box Type: EcoBox ${parsedBox.boxId}` : 'Box Type: No such data',
       ]);
+
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/orders/storeOrder`, {
+        items,
+        box: parsedBox,
+        employeeId
+      });
+
+      console.log("Order saved:", res.data);
     } catch (error) {
       console.error('Error fetching summary:', error);
       setScore(0);
@@ -76,8 +85,8 @@ const Last = () => {
       <ToastContainer />
 
       <div
-      className="min-h-screen bg-cover bg-center flex items-center justify-center p-6"
-      style={{ backgroundImage: `url(${bg})` }}
+        className="min-h-screen bg-cover bg-center flex items-center justify-center p-6"
+        style={{ backgroundImage: `url(${bg})` }}
       >
 
         {/* Main Card */}

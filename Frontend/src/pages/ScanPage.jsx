@@ -227,7 +227,7 @@ const ScanPage = () => {
                   <th className="border px-4 py-2">Weight</th>
                   <th className="border px-4 py-2">Volume</th>
                   <th className="border px-4 py-2">Qty</th>
-                  <th className="border px-4 py-2">Action</th> {/* New Column */}
+                  <th className="border px-4 py-2">Action</th>
                 </tr>
               </thead>
               <tbody>

@@ -3,7 +3,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 export const Logout = () => {
-  //const token = localStorage.getItem('token')
+  const token = localStorage.getItem('token')
   const navigate = useNavigate()
 
   axios.get(`${import.meta.env.VITE_BASE_URL}/users/logout`, {
@@ -12,7 +12,8 @@ export const Logout = () => {
     }
   }).then(response => {
     if (response.status === 200) {
-      //localStorage.removeItem('token')
+      localStorage.removeItem('token')
+      localStorage.removeItem('eid');
       navigate('/login')
     }
   })
