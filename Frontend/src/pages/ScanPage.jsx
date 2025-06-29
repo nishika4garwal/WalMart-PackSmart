@@ -61,6 +61,14 @@ const ScanPage = () => {
     }
   };
 
+  const handleRemoveItem = (index) => {
+    const updated = [...items];
+    updated.splice(index, 1);
+    setItems(updated);
+    saveItemsToStorage(updated);
+  };
+
+
   const startScanner = async () => {
     if (codeReaderRef.current) return;
     const hints = new Map();
@@ -219,6 +227,7 @@ const ScanPage = () => {
                   <th className="border px-4 py-2">Weight</th>
                   <th className="border px-4 py-2">Volume</th>
                   <th className="border px-4 py-2">Qty</th>
+                  <th className="border px-4 py-2">Action</th> {/* New Column */}
                 </tr>
               </thead>
               <tbody>
@@ -230,11 +239,19 @@ const ScanPage = () => {
                       <td className="border px-4 py-2">{item.weight} kg</td>
                       <td className="border px-4 py-2">{item.volume} cm³</td>
                       <td className="border px-4 py-2">{item.quantity}</td>
+                      <td className="border px-4 py-2">
+                        <button
+                          onClick={() => handleRemoveItem(i)}
+                          className="text-red-600 hover:text-red-800 font-semibold"
+                        >
+                          Remove
+                        </button>
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="5" className="text-center py-4 text-gray-500">
+                    <td colSpan="6" className="text-center py-4 text-gray-500">
                       No items scanned yet.
                     </td>
                   </tr>
