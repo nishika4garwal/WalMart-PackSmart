@@ -40,8 +40,6 @@ const getFeedback = (score) => {
 router.post("/storeOrder", async (req, res) => {
     try {
         const { box, items, employeeId } = req.body;
-        console.log(items);
-
         const parsedBox = typeof box === "string" ? JSON.parse(box) : box;
 
         // 1. Total CO2
