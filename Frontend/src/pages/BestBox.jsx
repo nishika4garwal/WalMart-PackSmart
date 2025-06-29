@@ -61,10 +61,10 @@ const BestBox = () => {
                 <p className="text-red-600 text-center font-semibold">{box.error}</p>
               ) : (
                 <div className="space-y-3 text-gray-800 text-center mb-4">
-                  <p><span className="font-semibold text-yellow-500">📦 ID:</span> {box.boxId}</p>
-                  <p><span className="font-semibold text-yellow-500">📐 Size:</span> {box.length}×{box.width}×{box.height} cm</p>
-                  <p><span className="font-semibold text-yellow-500">🧮 Volume:</span> {box.volume} cm³</p>
-                  <p><span className="font-semibold text-yellow-500">⚖️ Max Weight:</span> {box.maxWeightSupport} kg</p>
+                  <p><span className="font-semibold text-yellow-500">ID:</span> {box.boxId}</p>
+                  <p><span className="font-semibold text-yellow-500">Size:</span> {box.length}×{box.width}×{box.height} cm</p>
+                  <p><span className="font-semibold text-yellow-500">Volume:</span> {box.volume} cm³</p>
+                  <p><span className="font-semibold text-yellow-500">Max Weight:</span> {box.maxWeightSupport} kg</p>
                 </div>
               )
             ) : (

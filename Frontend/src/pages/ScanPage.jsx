@@ -25,14 +25,14 @@ const ScanPage = () => {
     } catch (error) {
       if (error.response) {
         if (error.response.status === 404) {
-          alert('❌ Item not found in the system.');
+          alert('Item not found in the system.');
         } else {
-          alert(`⚠️ Error: ${error.response.data.message || 'Something went wrong!'}`);
+          alert(`Error: ${error.response.data.message || 'Something went wrong!'}`);
         }
       } else if (error.request) {
-        alert('🚫 No response from server. Please try again.');
+        alert('No response from server. Please try again.');
       } else {
-        alert('⚠️ Request error: ' + error.message);
+        alert('Request error: ' + error.message);
       }
       return null;
     }
@@ -158,7 +158,7 @@ const ScanPage = () => {
       navigate('/bestbox');
     } catch (error) {
       console.error('Error calculating best box:', error);
-      alert('⚠️ Failed to predict best box.');
+      alert('Failed to predict best box.');
     }
   };
 
@@ -188,7 +188,7 @@ const ScanPage = () => {
 
         {/* Manual Entry */}
         <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md transition hover:shadow-2xl">
-          <h2 className="text-lg font-semibold text-trueblue mb-4 text-center">✍️ Manual Entry</h2>
+          <h2 className="text-lg font-semibold text-trueblue mb-4 text-center">Manual Entry</h2>
           <label className="block mb-2 text-sm font-medium text-gray-700">Enter Item ID:</label>
           <div className="flex gap-2">
             <input
