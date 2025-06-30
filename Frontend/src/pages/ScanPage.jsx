@@ -50,17 +50,37 @@ const ScanPage = () => {
       const qty = prompt(`Enter quantity for ${item.name}:`, '1');
       const quantity = parseInt(qty);
       if (!isNaN(quantity) && quantity > 0) {
-        setItems((prev) => {
-          const updated = [...prev, { ...item, quantity }];
-          saveItemsToStorage(updated);
-          return updated;
-        });
+        addOrUpdateItem(item, quantity);
         setManualId('');
       } else {
         alert('Invalid quantity. Item not added.');
       }
     }
   };
+
+
+  const addOrUpdateItem = (newItem, quantity) => {
+    setItems((prev) => {
+      const index = prev.findIndex((item) => item.itemId === newItem.itemId);
+      let updated;
+
+      if (index !== -1) {
+        // Item already exists, update quantity
+        updated = [...prev];
+        updated[index] = {
+          ...updated[index],
+          quantity: updated[index].quantity + quantity
+        };
+      } else {
+        // New item
+        updated = [...prev, { ...newItem, quantity }];
+      }
+
+      saveItemsToStorage(updated);
+      return updated;
+    });
+  };
+
 
   const handleRemoveItem = (index) => {
     const updated = [...items];
@@ -99,11 +119,7 @@ const ScanPage = () => {
             const qty = prompt(`Enter quantity for ${item.name}:`, '1');
             const quantity = parseInt(qty);
             if (!isNaN(quantity) && quantity > 0) {
-              setItems((prev) => {
-                const updated = [...prev, { ...item, quantity }];
-                saveItemsToStorage(updated);
-                return updated;
-              });
+              addOrUpdateItem(item, quantity);
             } else {
               alert('Invalid quantity. Item not added.');
             }
