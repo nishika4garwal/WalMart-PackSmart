@@ -32,9 +32,9 @@ const generateOrderId = () => {
 };
 
 const getFeedback = (score) => {
-    if (score >= 100) return '🎉 Yay! You contributed to the Earth!';
-    if (score >= 50) return '🌱 Good effort, but there\'s room to grow!';
-    return '⚠️ Oh no! Try better next time!';
+    if (score >= 70) return 'Excellent! You contributed to the Earth';
+    if (score >= 50) return 'Good effort, but there\'s room to grow';
+    return 'Try better next time';
 };
 
 router.post("/storeOrder", async (req, res) => {

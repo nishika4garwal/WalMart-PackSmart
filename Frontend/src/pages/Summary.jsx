@@ -126,7 +126,7 @@ const Summary = () => {
       source: "Project Gigaton Initiative",
     },
     {
-      title: "🏷️ Labeling Accuracy",
+      title: "🏷️ Labeling Stats",
       goal: "Consistent eco-labeling on all products",
       achieved: labelUsage.length,
       source: "Walmart Private Brands Strategy",

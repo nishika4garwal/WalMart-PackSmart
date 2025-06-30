@@ -84,7 +84,7 @@ const Last = () => {
   };
 
   const getFeedback = () => {
-    if (score >= 80) return 'Excellent! You contributed to the Earth!';
+    if (score >= 70) return 'Excellent! You contributed to the Earth!';
     if (score >= 50) return 'Good effort, but there\'s room to grow.';
     return 'Try better next time.';
   };
