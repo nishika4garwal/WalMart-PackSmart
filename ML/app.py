@@ -1,7 +1,6 @@
 # app.py
 from flask import Flask, request, jsonify
 import joblib # type: ignore
-import pandas as pd # type: ignore
 from flask_cors import CORS # type: ignore
 
 app = Flask(__name__)
