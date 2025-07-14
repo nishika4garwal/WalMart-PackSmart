@@ -63,8 +63,6 @@ In large-scale warehouses like Walmart’s, choosing the right box size and mate
 
 ---
 
----
-
 ## ☁️ Deployment
 
 - **Frontend** deployed on **[Vercel](https://vercel.com/)**  
@@ -100,7 +98,7 @@ WalMart-PackSmart/
 ```bash
 git clone https://github.com/ishita-tayal/WalMart-PackSmart.git
 cd WalMart-PackSmart
-
+```
 
 
 #### Setup Backend
@@ -129,6 +127,7 @@ python app.py
 
 
 > ✅ Ensure both frontend and backend `.env` files are configured properly.
+>
 > ✅ The ML server must be running alongside the backend to enable box prediction functionality.
 
 ---
