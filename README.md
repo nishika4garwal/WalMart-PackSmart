@@ -2,6 +2,12 @@
   <img src="Frontend/src/assets/logo.png" alt="WalMart-PackSmart Logo" width="200"/>
 </p>
 
+<p align="center">
+  <a href="https://wal-mart-pack-smart.vercel.app/" target="_blank">
+    <img src="https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo"/>
+  </a>
+</p>
+
 # WalMart-PackSmart
 
 **Smart Packing. Sustainable Future.**
@@ -56,8 +62,8 @@ In large-scale warehouses like Walmart’s, choosing the right box size and mate
 
 ```bash
 WalMart-PackSmart/
-├── Frontend/        # Frontend (React)
-├── Backend/        # Backend (Node.js + Express)
+├── Frontend/        
+├── Backend/        
 └── README.md
 ```
 
@@ -102,8 +108,18 @@ npm run dev
 
 ## 📸 Screenshots
 
-![image](https://github.com/user-attachments/assets/1cce61b4-9b22-4bad-8ccc-7d334f62de32)
-*More to be added soon...*
+### 🔍 Login Page
+![Login Page](Frontend/src/assets/screenshots/login.png)
+
+### 🔍 Home Page
+![Home Page](Frontend/src/assets/screenshots/home.png)
+
+### 📦 Box Recommendation
+![Box Recommendation](Frontend/src/assets/screenshots/box.png)
+
+### 📊 Sustainability Score
+![Score](Frontend/src/assets/screenshots/score.png)
+
 
 ---
 
