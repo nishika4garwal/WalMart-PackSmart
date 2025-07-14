@@ -56,14 +56,30 @@ In large-scale warehouses like Walmart’s, choosing the right box size and mate
   - dotenv for environment configs  
   - `python-shell` to run Python scripts from Node (for box logic or AI-based analysis)
 
+- **Machine Learning:**  
+  - Python  
+  - A custom-trained model predicts optimal packaging choices based on product dimensions and materials  
+  - Integrated via `python-shell` in the backend for real-time inference
+
 ---
+
+---
+
+## ☁️ Deployment
+
+- **Frontend** deployed on **[Vercel](https://vercel.com/)**  
+- **Backend & ML Models** deployed on **[Render](https://render.com/)**
+
+> The frontend makes API calls to the Render backend, which internally uses Python scripts (via `python-shell`) to run the ML model for box selection.
+
 
 ## 📂 Project Structure
 
 ```bash
 WalMart-PackSmart/
 ├── Frontend/        
-├── Backend/        
+├── Backend/  
+├── ML/         
 └── README.md
 ```
 
@@ -74,6 +90,7 @@ WalMart-PackSmart/
 ### Prerequisites
 
 - Node.js and npm installed  
+- Python 3 installed  
 - MongoDB running (locally or via cloud like Atlas)
 
 ### Installation
@@ -83,7 +100,7 @@ WalMart-PackSmart/
 ```bash
 git clone https://github.com/ishita-tayal/WalMart-PackSmart.git
 cd WalMart-PackSmart
-```
+
 
 
 #### Setup Backend
@@ -102,7 +119,17 @@ npm install
 npm run dev
 ```
 
+#### Setup Machine Learning Model Server
+
+```bash
+cd ../ML
+pip install -r requirements.txt
+python app.py
+```
+
+
 > ✅ Ensure both frontend and backend `.env` files are configured properly.
+> ✅ The ML server must be running alongside the backend to enable box prediction functionality.
 
 ---
 
